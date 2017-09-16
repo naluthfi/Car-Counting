@@ -7,11 +7,9 @@
 
 #include<iostream>
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
 int main(void) {
 
     cv::VideoCapture capVideo;
-
     cv::Mat imgFrame;
     cv::Mat grayscaleFrame;
 
@@ -29,33 +27,28 @@ int main(void) {
 
     capVideo.read(imgFrame);
 
-    char chCheckForEscKey = 0;
-
-    while (capVideo.isOpened() && chCheckForEscKey != 27) {
+    while (capVideo.isOpened()) {
 
         cv::imshow("imgFrame", imgFrame);
-        cvtColor(imgFrame, grayscaleFrame, CV_BGR2GRAY);
-        equalizeHist(grayscaleFrame, grayscaleFrame);
-        cv::imshow("grayFrame", grayFrame);
-
-                // now we prepare for the next iteration
 
         if ((capVideo.get(CV_CAP_PROP_POS_FRAMES) + 1) < capVideo.get(CV_CAP_PROP_FRAME_COUNT)) {       // if there is at least one more frame
             capVideo.read(imgFrame);                            // read it
-        }
+/*	cv::Mat frame;
+	capVideo>>frame;
+        cvtColor(frame, grayscaleFrame, CV_BGR2GRAY);
+        equalizeHist(grayscaleFrame, grayscaleFrame);
+        cv::Mat grayFrame;
+        cv::imshow("grayFrame", grayFrame);
+*/        }
         else {                                                  // else
             std::cout << "end of video\n";                      // show end of video message
             break;                                              // and jump out of while loop
         }
 
-        chCheckForEscKey = cv::waitKey(1);      // get key press in case user pressed esc
+        cv::waitKey(1);
 
     }
 
-    if (chCheckForEscKey != 27) {               // if the user did not press esc (i.e. we reached the end of the video)
-        cv::waitKey(0);                         // hold the windows open to allow the "end of video" message to show
-    }
-        // note that if the user did press esc, we don't need to hold the windows open, we can simply let the program end which will close the windows
 
     return(0);
 }
