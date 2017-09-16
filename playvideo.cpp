@@ -31,6 +31,8 @@ int main(void) {
         imshow("video", frame);
         waitKey(20);
 		cv::resize(frame, resized, cv::Size(800, 600));
+		//cvLine(resized,center,center1,Scalar(255, 0, 0),1 CV_AA);
+		line(resized, Point(150,240), Point(750,240), Scalar(0, 0, 255), 2, 8, 0);
 		cv::imshow("resized",resized);
 		waitKey(20);
 		cvtColor(frame, grayscaleFrame, CV_BGR2GRAY);
@@ -56,10 +58,14 @@ int main(void) {
     	cv::findContours(Temp, contours,CV_RETR_EXTERNAL,CV_CHAIN_APPROX_SIMPLE);
     	cv::Mat contourImage(Temp.size(), CV_8UC3, cv::Scalar(0,0,0));
 		for (size_t idx = 0; idx < contours.size(); idx++) {
-			cv::drawContours(contourImage, contours, idx, Scalar(255, 255, 255), 1, 8, hier);
+			cv::drawContours(contourImage, contours, idx, Scalar(255, 255, 255), 2, 8, hier);
 			Rect box = boundingRect(contours[idx]); 
 			rectangle(contourImage, box, Scalar(0,255,0));
 		}
+
+
+		//Point center = 150 + contours[idx].x, 240 + 100;
+		//Point center1 = 750 + 100, 240 + 100;
 		imshow("foreground mask", foregroundMask);
     	imshow("foreground frame", foregroundFrame);
     	imshow("Contour", contourImage);
