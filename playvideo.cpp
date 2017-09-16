@@ -62,13 +62,15 @@ int main(void) {
 			Rect box = boundingRect(contours[idx]); 
 			rectangle(contourImage, box, Scalar(0,255,0));
 		}
-
-
+		Mat resizedforemask, resizedforeframe, resizedcontour;
+		resize(foregroundMask, resizedforemask, cv::Size(800, 600));
+		resize(foregroundFrame, resizedforeframe, cv::Size(800, 600));
+		resize(contourImage, resizedcontour, cv::Size(800, 600));
 		//Point center = 150 + contours[idx].x, 240 + 100;
 		//Point center1 = 750 + 100, 240 + 100;
-		imshow("foreground mask", foregroundMask);
-    	imshow("foreground frame", foregroundFrame);
-    	imshow("Contour", contourImage);
+		imshow("foreground mask", resizedforemask);
+    	imshow("foreground frame", resizedforeframe);
+    	imshow("Contour", resizedcontour);
 		cv::waitKey(40);
     }
     cv::waitKey(0); 
