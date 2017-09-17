@@ -28,8 +28,8 @@ int main(void) {
 		cv::Mat frame, resized;
         capVideo >> frame;
         if(frame.empty()) break;
-        imshow("video", frame);
-        waitKey(20);
+        //imshow("video", frame);
+        //waitKey(10);
 		cv::resize(frame, resized, cv::Size(800, 600));
 		//cvLine(resized,center,center1,Scalar(255, 0, 0),1 CV_AA);
 		line(resized, Point(150,240), Point(750,240), Scalar(0, 0, 255), 2, 8, 0);
@@ -59,14 +59,14 @@ int main(void) {
 			cv::drawContours(contourImage, contours, idx, Scalar(255, 255, 255), 2, 8, hier);
 			Rect box = boundingRect(contours[idx]); 
 			rectangle(resized, box, Scalar(0,255,0));
-			cv::imshow("resized",resized);
-			waitKey(20);
 			//circle(contourImage, Point(50,50),50, Scalar(255,255,255),CV_FILLED, 8,0);
 		}
+
+		imshow("resized",resized);
 		imshow("foreground mask", foregroundMask);
     	imshow("foreground frame", foregroundFrame);
     	imshow("Contour", contourImage);
-		cv::waitKey(40);
+		cv::waitKey(10);
     }
     cv::waitKey(0); 
     return(0);
