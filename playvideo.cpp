@@ -33,8 +33,6 @@ int main(void) {
 		cv::resize(frame, resized, cv::Size(800, 600));
 		//cvLine(resized,center,center1,Scalar(255, 0, 0),1 CV_AA);
 		line(resized, Point(150,240), Point(750,240), Scalar(0, 0, 255), 2, 8, 0);
-		cv::imshow("resized",resized);
-		waitKey(20);
 		cvtColor(frame, grayscaleFrame, CV_BGR2GRAY);
     	equalizeHist(grayscaleFrame, grayscaleFrame);
     	cv::Mat grayFrame, foregroundMask, foregroundFrame, backgroundFrame;
@@ -42,13 +40,13 @@ int main(void) {
 //  cv::imshow("grayFrame", grayscaleFrame);
 //  cv::waitKey(20); // waits to display frame
 		if( foregroundMask.empty() ){
-    	    foregroundMask.create(frame.size(), frame.type());
+    	    foregroundMask.create(resized.size(), resized.type());
     	    }
-		bg_model->apply(frame, foregroundMask, true ? -1 : 0);
+		bg_model->apply(resized, foregroundMask, true ? -1 : 0);
 		cv::GaussianBlur(foregroundMask, foregroundMask, cv::Size(11,11), 3.5,3.5);
 		cv::threshold(foregroundMask, foregroundMask, 130, 255, cv::THRESH_BINARY);
 		foregroundFrame = cv::Scalar::all(0);
-		frame.copyTo(foregroundFrame, foregroundMask);
+		resized.copyTo(foregroundFrame, foregroundMask);
 		bg_model->getBackgroundImage(backgroundFrame);
     	Mat Temp, img;
 		foregroundMask.convertTo(Temp, CV_8UC1);
@@ -60,17 +58,14 @@ int main(void) {
 		for (size_t idx = 0; idx < contours.size(); idx++) {
 			cv::drawContours(contourImage, contours, idx, Scalar(255, 255, 255), 2, 8, hier);
 			Rect box = boundingRect(contours[idx]); 
-			rectangle(contourImage, box, Scalar(0,255,0));
+			rectangle(resized, box, Scalar(0,255,0));
+			cv::imshow("resized",resized);
+			waitKey(20);
+			//circle(contourImage, Point(50,50),50, Scalar(255,255,255),CV_FILLED, 8,0);
 		}
-		Mat resizedforemask, resizedforeframe, resizedcontour;
-		resize(foregroundMask, resizedforemask, cv::Size(800, 600));
-		resize(foregroundFrame, resizedforeframe, cv::Size(800, 600));
-		resize(contourImage, resizedcontour, cv::Size(800, 600));
-		//Point center = 150 + contours[idx].x, 240 + 100;
-		//Point center1 = 750 + 100, 240 + 100;
-		imshow("foreground mask", resizedforemask);
-    	imshow("foreground frame", resizedforeframe);
-    	imshow("Contour", resizedcontour);
+		imshow("foreground mask", foregroundMask);
+    	imshow("foreground frame", foregroundFrame);
+    	imshow("Contour", contourImage);
 		cv::waitKey(40);
     }
     cv::waitKey(0); 
